@@ -1,0 +1,29 @@
+package com.v3.hub.bus.rider.MHubRide.entity;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.Date;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Table(name = "CONDUCTOR_INFO")
+@Entity
+public class ConductorInformation {
+
+    @Id
+    private String driverId;
+    private String driverName;
+    private String licenseNumber;
+    private Date dateOfBirth;
+    private String note;
+
+    @OneToOne
+    @JoinColumn(name = "bus_FK")
+    private BusInformation busInformation;
+}
