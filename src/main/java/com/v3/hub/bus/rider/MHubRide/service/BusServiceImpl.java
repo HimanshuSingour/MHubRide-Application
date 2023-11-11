@@ -59,6 +59,10 @@ public class BusServiceImpl implements BusService {
             throw new BusServiceException("Owner with the provided email already exists.");
         }
 
+        if (busOwnerRepositories.existsByOwnerContactNumber(ownerRequest.getOwnerContactNumber())) {
+            throw new BusServiceException("Owner with the provided contact number already exists.");
+        }
+
         BusOwnerApp busOwnerApp = BusOwnerApp.builder()
                 .ownerId(UUID.randomUUID().toString())
                 .ownerAddress(ownerRequest.getOwnerAddress())

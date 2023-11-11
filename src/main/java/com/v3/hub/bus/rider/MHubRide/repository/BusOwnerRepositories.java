@@ -11,4 +11,6 @@ import java.util.Optional;
 public interface BusOwnerRepositories extends JpaRepository<BusOwnerApp , String> {
 
     boolean existsByOwnerEmail(String ownerEmail);
+
+    boolean existsByOwnerContactNumber(String ownerContactNumber);
 }
