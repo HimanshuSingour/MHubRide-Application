@@ -1,8 +1,11 @@
 package com.v3.hub.bus.rider.MHubRide.service;
 
+import com.v3.hub.bus.rider.MHubRide.dto.BusDto.BusRequest;
 import com.v3.hub.bus.rider.MHubRide.dto.BusDto.BusResponse;
 import com.v3.hub.bus.rider.MHubRide.dto.OwnerDto.OwnerRequest;
 import com.v3.hub.bus.rider.MHubRide.dto.OwnerDto.OwnerResponse;
+import com.v3.hub.bus.rider.MHubRide.dto.OwnerInforDto.OwnerInfoRequest;
+import com.v3.hub.bus.rider.MHubRide.dto.OwnerInforDto.OwnerInfoResponse;
 import com.v3.hub.bus.rider.MHubRide.entity.BusInformation;
 import com.v3.hub.bus.rider.MHubRide.entity.BusOwnerApp;
 import com.v3.hub.bus.rider.MHubRide.exceptions.BusServiceException;
@@ -15,6 +18,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -34,15 +38,9 @@ public class BusServiceImpl implements BusService {
     @Autowired
     private BusOwnerRepositories busOwnerRepositories;
 
-    private final LocalDateTime localDateTime = LocalDateTime.now();
-
 
     @Override
     public OwnerResponse addOwnerInformation(OwnerRequest ownerRequest) {
-
-        LocalDate currentDate = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
-        String formattedDate = currentDate.format(formatter);
 
         if (ownerRequest.getOwnerFirstName().isBlank()
                 || ownerRequest.getOwnerLastName().isBlank()
@@ -54,14 +52,20 @@ public class BusServiceImpl implements BusService {
 
             throw new BusServiceException(ALL_FIELDS_ARE_REQUIRED);
         }
-
-        if (busOwnerRepositories.existsByOwnerEmail(ownerRequest.getOwnerEmail())) {
-            throw new BusServiceException("Owner with the provided email already exists.");
+        if (ownerRequest.getOwnerFirstName().length() < 4 || ownerRequest.getOwnerFirstName().length() > 20) {
+            throw new BusServiceException(FIRST_NAME_LENGTH);
+        } else if (ownerRequest.getOwnerLastName().length() < 4 || ownerRequest.getOwnerLastName().length() > 20) {
+            throw new BusServiceException(LAST_NAME_LENGTH);
+        } else if (busOwnerRepositories.existsByOwnerEmail(ownerRequest.getOwnerEmail())) {
+            throw new BusServiceException(OWNER_EMAIL_EXIST);
+        } else if (busOwnerRepositories.existsByOwnerContactNumber(ownerRequest.getOwnerContactNumber())) {
+            throw new BusServiceException(OWNER_PHONE_EXIST);
         }
 
-        if (busOwnerRepositories.existsByOwnerContactNumber(ownerRequest.getOwnerContactNumber())) {
-            throw new BusServiceException("Owner with the provided contact number already exists.");
-        }
+
+        LocalDate currentDate = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
+        String formattedDate = currentDate.format(formatter);
 
         BusOwnerApp busOwnerApp = BusOwnerApp.builder()
                 .ownerId(UUID.randomUUID().toString())
@@ -77,7 +81,9 @@ public class BusServiceImpl implements BusService {
                 .ownerRegistrationDate(formattedDate)
                 .insuranceImportantMesMessage(ALERT_MESSAGE)
                 .note(OWNER_ADDED_SUCCESSFULLY)
-                .build(); busOwnerRepositories.save(busOwnerApp);
+                .numberOfBuses(String.valueOf(4))
+                .build();
+        busOwnerRepositories.save(busOwnerApp);
 
         return OwnerResponse.builder()
                 .ownerId(busOwnerApp.getOwnerId())
@@ -91,14 +97,14 @@ public class BusServiceImpl implements BusService {
                 .ownerTodayDate(busOwnerApp.getOwnerTodayDate())
                 .ownerContactNumber(busOwnerApp.getOwnerContactNumber())
                 .ownerAge(busOwnerApp.getOwnerAge())
+                .ownerNumberOfBuses(busOwnerApp.getNumberOfBuses())
                 .ownerName(busOwnerApp.getOwnerFirstName() + " " + busOwnerApp.getOwnerLastName())
                 .build();
     }
 
     @Override
-    public BusResponse saveBus(BusInformation busInformation) {
+    public BusResponse saveBus(BusRequest busRequest) {
 
-        String busIdGenerator = UUID.randomUUID().toString();
         LocalDateTime currentDateTime = LocalDate.now().atStartOfDay();
         LocalDateTime maintenanceDate = currentDateTime.plusDays(60);
 
@@ -106,17 +112,95 @@ public class BusServiceImpl implements BusService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
         String formattedDate = currentDate.format(formatter);
 
+        if (busRequest.getRoute().isBlank() || busRequest.getRoute().isEmpty()) {
+            throw new BusServiceException(ROUTE_NOT_PROVIDED);
+        }
+
         BusInformation information = null;
 
-        if (busInformation.getRoute().isBlank() || busInformation.getRoute().isEmpty()) {
-            throw new BusServiceException(ROUTE_NOT_PROVIDED);
-
-        } else {
-            information = BusInformation.builder().busId(busIdGenerator).busNumber("MP51" + "-" + PayLoadsConfig.generateBusNumber()).modelNumber(PayLoadsConfig.generateBusModelNumber()).busInit(PayLoadsConfig.generateRandomInit()).route(busInformation.getRoute()).busAddedDate(formattedDate).fuelCapacity(busInformation.getFuelCapacity()).maintenanceToday(String.valueOf(formatter)).mileage(busInformation.getMileage()).numberOfSeats(80).busAddedTime(String.valueOf(LocalTime.now())).manufacturer(PayLoadsConfig.generateRandomBusCompanyName()).build();
-            busRepositories.save(information);
+        Optional<BusOwnerApp> busOwnerApp = busOwnerRepositories.findById(busRequest.getOwnerId());
+        if (busOwnerApp.isPresent()) {
+            Optional<BusInformation> busInformation = busRepositories.findById(busRequest.getBusId());
+            if (busInformation.isEmpty()) {
+                information = BusInformation.builder()
+                        .busNumber("MP51" + "-" + PayLoadsConfig.generateBusNumber())
+                        .busId(busRequest.getBusId())
+                        .modelNumber(PayLoadsConfig.generateBusModelNumber())
+                        .busInit(PayLoadsConfig.generateRandomInit())
+                        .route(busRequest.getRoute())
+                        .busAddedDate(formattedDate)
+                        .fuelCapacity(busRequest.getFuelCapacity())
+                        .maintenanceToday(String.valueOf(formatter))
+                        .mileage(busRequest.getMileage())
+                        .numberOfSeats(80)
+                        .busAddedTime(String.valueOf(LocalTime.now()))
+                        .manufacturer(PayLoadsConfig.generateRandomBusCompanyName())
+                        .busOwnerApp(busOwnerApp.get())
+                        .ownerId(busRequest.getOwnerId())
+                        .build();
+                busRepositories.save(information);
+            } else {
+                throw new BusServiceException(BUS_ALREADY_EXIST);
+            }
         }
-        return BusResponse.builder().busNumber(information.getBusNumber()).butInit(information.getBusInit()).busId(information.getBusId()).route(information.getRoute()).maintenanceToday(String.valueOf(currentDateTime)).todayDate(formattedDate).localTime(LocalTime.parse(String.valueOf(LocalTime.now()))).manufacturer(information.getManufacturer()).message(BUS_ADDED_SUCCESSFULLY).statusOwner(TO_OWNER_MOBILE).comingMaintenanceDay(UPCOMING_MAINTENANCE_DAY + " - " + String.valueOf(maintenanceDate)).build();
+        assert information != null;
+        return BusResponse.builder()
+                .busNumber(information.getBusNumber())
+                .butInit(information.getBusInit())
+                .busId(information.getBusId())
+                .route(information.getRoute())
+                .maintenanceToday(String.valueOf(currentDateTime))
+                .todayDate(formattedDate)
+                .localTime(LocalTime.parse(String.valueOf(LocalTime.now())))
+                .manufacturer(information.getManufacturer())
+                .message(BUS_ADDED_SUCCESSFULLY).statusOwner(TO_OWNER_MOBILE)
+                .comingMaintenanceDay(UPCOMING_MAINTENANCE_DAY + " - " + String.valueOf(maintenanceDate))
+                .build();
+
+    }
+
+    @Override
+    public OwnerInfoResponse getOwnerInfo(String ownerId, String ownerContactNumber, String ownerEmail) {
+
+        if (ownerId.isBlank() || ownerContactNumber.isBlank() || ownerEmail.isBlank()) {
+            throw new BusServiceException(ALL_FIELDS_ARE_REQUIRED);
+        }
+
+        Optional<BusOwnerApp> forId = busOwnerRepositories.findById(ownerId);
+
+        if (forId.isPresent()) {
+            BusOwnerApp ownerApp = forId.get();
+
+            List<BusInformation> busInformationList = busRepositories.findByOwnerId(ownerApp.getOwnerId());
+            ownerApp.setBusInformation(busInformationList);
+
+            // Convert to response DTO
+            OwnerInfoResponse response = OwnerInfoResponse.builder()
+                    .ownerId(ownerApp.getOwnerId())
+                    .ownerFirstName(ownerApp.getOwnerFirstName())
+                    .ownerLastName(ownerApp.getOwnerLastName())
+                    .ownerAge(ownerApp.getOwnerAge())
+                    .ownerContactNumber(ownerApp.getOwnerContactNumber())
+                    .ownerAddress(ownerApp.getOwnerAddress())
+                    .ownerTodayDate(ownerApp.getOwnerTodayDate())
+                    .ownerEmail(ownerApp.getOwnerEmail())
+                    .ownerCompany(ownerApp.getOwnerCompany())
+                    .ownerRegistrationDate(ownerApp.getOwnerRegistrationDate())
+                    .ownerInsuranceNumber(ownerApp.getOwnerInsuranceNumber())
+                    .insuranceImportantMesMessage(ownerApp.getInsuranceImportantMesMessage())
+                    .numberOfBuses(ownerApp.getNumberOfBuses())
+                    .note(ownerApp.getNote())
+                    .busInformation(ownerApp.getBusInformation())
+                    .build();
+
+            return response;
+        } else {
+            throw new BusServiceException("Id is not available");
+        }
+
     }
 }
+
+
 
 

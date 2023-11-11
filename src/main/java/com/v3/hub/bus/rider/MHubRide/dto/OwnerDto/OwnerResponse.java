@@ -13,6 +13,7 @@ public class OwnerResponse {
     private String ownerAddress;
     private String ownerEmail;
     private String ownerAge;
+    private String ownerNumberOfBuses;
     private String ownerCompany;
     private String ownerRegistrationDate;
     private String ownerTodayDate;

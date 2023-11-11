@@ -9,7 +9,7 @@ import java.time.LocalTime;
 @Builder
 public class BusResponse {
 
-    private String busId;
+    private int busId;
     private String butInit;
     private String busNumber;
     private String maintenanceToday;

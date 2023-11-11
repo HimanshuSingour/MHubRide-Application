@@ -1,21 +1,15 @@
-package com.v3.hub.bus.rider.MHubRide.entity;
+package com.v3.hub.bus.rider.MHubRide.dto.OwnerInforDto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
-import lombok.*;
+import com.v3.hub.bus.rider.MHubRide.entity.BusInformation;
+import lombok.Builder;
+import lombok.Data;
 
 import java.util.List;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@Table(name = "BUS_OWNER_INFO")
-@Entity
+@Data
 @Builder
-public class BusOwnerApp {
+public class OwnerInfoResponse {
 
-    @Id
     private String ownerId;
     private String ownerFirstName;
     private String ownerLastName;
@@ -31,7 +25,5 @@ public class BusOwnerApp {
     private String numberOfBuses;
     private String note;;
 
-    @OneToMany(mappedBy = "busOwnerApp" , cascade = CascadeType.ALL , fetch = FetchType.EAGER)
-    @JsonIgnore
     private List<BusInformation> busInformation;
 }

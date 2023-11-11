@@ -17,7 +17,8 @@ import java.util.List;
 public class BusInformation {
 
     @Id
-    private String busId;
+    private int busId;
+    private String ownerId;
     private String busInit;
     private String busNumber;
     private String modelNumber;
@@ -30,8 +31,10 @@ public class BusInformation {
     private String busAddedDate;
     private String busAddedTime;
 
+
     @ManyToOne
-    @JoinColumn(name = "owner_Id")
+    @JoinColumn(name = "owner_Id_PK")
+    @JsonIgnore
     private BusOwnerApp busOwnerApp;
 
     @OneToOne(mappedBy = "busInformation" , cascade = CascadeType.ALL , fetch = FetchType.EAGER)
