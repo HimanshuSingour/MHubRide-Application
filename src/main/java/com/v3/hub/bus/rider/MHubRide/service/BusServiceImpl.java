@@ -1,7 +1,8 @@
 package com.v3.hub.bus.rider.MHubRide.service;
 
-import com.v3.hub.bus.rider.MHubRide.dto.BusResponse;
-import com.v3.hub.bus.rider.MHubRide.dto.OwnerResponse;
+import com.v3.hub.bus.rider.MHubRide.dto.BusDto.BusResponse;
+import com.v3.hub.bus.rider.MHubRide.dto.OwnerDto.OwnerRequest;
+import com.v3.hub.bus.rider.MHubRide.dto.OwnerDto.OwnerResponse;
 import com.v3.hub.bus.rider.MHubRide.entity.BusInformation;
 import com.v3.hub.bus.rider.MHubRide.entity.BusOwnerApp;
 import com.v3.hub.bus.rider.MHubRide.exceptions.BusServiceException;
@@ -37,11 +38,50 @@ public class BusServiceImpl implements BusService {
 
 
     @Override
-    public OwnerResponse addOwnerInformation(BusOwnerApp busOwnerApp) {
+    public OwnerResponse addOwnerInformation(OwnerRequest ownerRequest) {
 
+        if (ownerRequest.getOwnerFirstName().isBlank() || ownerRequest.getOwnerLastName().isBlank() || ownerRequest.getOwnerEmail().isBlank()
+                || ownerRequest.getOwnerContactNumber().isBlank()
+                || ownerRequest.getOwnerAddress().isBlank() || ownerRequest.getOwnerCompany().isBlank() ||
+                ownerRequest.getOwnerAge().isBlank()) {
 
+            throw new BusServiceException(ALL_FIELDS_ARE_REQUIRED);
+        }
 
-        return null;
+        LocalDate currentDate = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
+        String formattedDate = currentDate.format(formatter);
+
+        BusOwnerApp busOwnerApp = BusOwnerApp.builder()
+                .ownerId(UUID.randomUUID().toString())
+                .ownerAddress(ownerRequest.getOwnerAddress())
+                .ownerAge(ownerRequest.getOwnerAge())
+                .ownerCompany(ownerRequest.getOwnerCompany())
+                .ownerEmail(ownerRequest.getOwnerEmail())
+                .ownerContactNumber(ownerRequest.getOwnerContactNumber())
+                .ownerInsuranceNumber(PayLoadsConfig.generateBusInsuranceNumber())
+                .ownerTodayDate(formattedDate)
+                .ownerFirstName(ownerRequest.getOwnerFirstName())
+                .ownerLastName(ownerRequest.getOwnerLastName())
+                .ownerRegistrationDate(formattedDate)
+                .insuranceImportantMesMessage(ALERT_MESSAGE)
+                .note(OWNER_ADDED_SUCCESSFULLY)
+                .build(); busOwnerRepositories.save(busOwnerApp);
+
+        return OwnerResponse.builder()
+                .ownerId(busOwnerApp.getOwnerId())
+                .ownerCompany(busOwnerApp.getOwnerCompany())
+                .ownerEmail(busOwnerApp.getOwnerEmail())
+                .ownerRegistrationDate(busOwnerApp.getOwnerRegistrationDate())
+                .note(busOwnerApp.getNote())
+                .ownerInsuranceNumber(busOwnerApp.getOwnerInsuranceNumber())
+                .ownerAddress(busOwnerApp.getOwnerAddress())
+                .insuranceImportantMesMessage(busOwnerApp.getInsuranceImportantMesMessage())
+                .ownerTodayDate(busOwnerApp.getOwnerTodayDate())
+                .ownerContactNumber(busOwnerApp.getOwnerContactNumber())
+                .ownerAge(busOwnerApp.getOwnerAge())
+                .ownerName(busOwnerApp.getOwnerFirstName() + " " + busOwnerApp.getOwnerLastName())
+                .build();
     }
 
     @Override
@@ -61,35 +101,10 @@ public class BusServiceImpl implements BusService {
             throw new BusServiceException(ROUTE_NOT_PROVIDED);
 
         } else {
-            information = BusInformation.builder()
-                    .busId(busIdGenerator)
-                    .busNumber("MP51" + "-" + PayLoadsConfig.generateBusNumber())
-                    .modelNumber(PayLoadsConfig.generateBusModelNumber())
-                    .busInit(PayLoadsConfig.generateRandomInit())
-                    .route(busInformation.getRoute())
-                    .busAddedDate(formattedDate)
-                    .fuelCapacity(busInformation.getFuelCapacity())
-                    .maintenanceToday(String.valueOf(formatter))
-                    .mileage(busInformation.getMileage())
-                    .numberOfSeats(80)
-                    .busAddedTime(String.valueOf(LocalTime.now()))
-                    .manufacturer(PayLoadsConfig.generateRandomBusCompanyName())
-                    .build();
+            information = BusInformation.builder().busId(busIdGenerator).busNumber("MP51" + "-" + PayLoadsConfig.generateBusNumber()).modelNumber(PayLoadsConfig.generateBusModelNumber()).busInit(PayLoadsConfig.generateRandomInit()).route(busInformation.getRoute()).busAddedDate(formattedDate).fuelCapacity(busInformation.getFuelCapacity()).maintenanceToday(String.valueOf(formatter)).mileage(busInformation.getMileage()).numberOfSeats(80).busAddedTime(String.valueOf(LocalTime.now())).manufacturer(PayLoadsConfig.generateRandomBusCompanyName()).build();
             busRepositories.save(information);
         }
-        return BusResponse.builder()
-                .busNumber(information.getBusNumber())
-                .butInit(information.getBusInit())
-                .busId(information.getBusId())
-                .route(information.getRoute())
-                .maintenanceToday(String.valueOf(currentDateTime))
-                .todayDate(formattedDate)
-                .localTime(LocalTime.parse(String.valueOf(LocalTime.now())))
-                .manufacturer(information.getManufacturer())
-                .message(BUS_ADDED_SUCCESSFULLY)
-                .statusOwner(TO_OWNER_MOBILE)
-                .comingMaintenanceDay(UPCOMING_MAINTENANCE_DAY + " - " + String.valueOf(maintenanceDate))
-                .build();
+        return BusResponse.builder().busNumber(information.getBusNumber()).butInit(information.getBusInit()).busId(information.getBusId()).route(information.getRoute()).maintenanceToday(String.valueOf(currentDateTime)).todayDate(formattedDate).localTime(LocalTime.parse(String.valueOf(LocalTime.now()))).manufacturer(information.getManufacturer()).message(BUS_ADDED_SUCCESSFULLY).statusOwner(TO_OWNER_MOBILE).comingMaintenanceDay(UPCOMING_MAINTENANCE_DAY + " - " + String.valueOf(maintenanceDate)).build();
     }
 }
 

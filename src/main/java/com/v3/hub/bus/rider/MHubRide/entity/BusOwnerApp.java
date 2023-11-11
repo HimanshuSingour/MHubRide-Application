@@ -17,18 +17,19 @@ public class BusOwnerApp {
 
     @Id
     private String ownerId;
-    private String ownerName;
-    private String contactNumber;
-    private String busLicenseNumber;
-    private String address;
-    private String email;
-    private String company;
-    private String registrationDate;
-    private String insuranceNumber;
-    private String busModel;
-    private int numberOfBuses;
+    private String ownerFirstName;
+    private String ownerLastName;
+    private String ownerAge;
+    private String ownerContactNumber;
+    private String ownerAddress;
+    private String ownerTodayDate;
+    private String ownerEmail;
+    private String ownerCompany;
+    private String ownerRegistrationDate;
+    private String ownerInsuranceNumber;
+    private String insuranceImportantMesMessage;
+    private String note;;
 
     @OneToMany(mappedBy = "busOwnerApp" , cascade = CascadeType.ALL , fetch = FetchType.EAGER)
-    @JsonIgnore
     private List<BusInformation> busInformation;
 }

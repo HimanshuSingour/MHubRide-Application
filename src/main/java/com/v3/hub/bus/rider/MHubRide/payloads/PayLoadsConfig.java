@@ -49,6 +49,20 @@ public class PayLoadsConfig {
 
     }
 
+    public static String generateBusInsuranceNumber() {
+
+        String prefix = "BUS";
+        int randomDigits = generateRandomDigits(6);
+        String insuranceNumber = prefix + randomDigits;
+        return insuranceNumber;
+    }
+
+    private static int generateRandomDigits(int numberOfDigits) {
+        Random random = new Random();
+        int max = (int) Math.pow(10, numberOfDigits);
+        return random.nextInt(max);
+    }
+
     public static String generateRandomBusCompanyName() {
 
         Random random = new Random();

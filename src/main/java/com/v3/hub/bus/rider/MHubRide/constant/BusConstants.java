@@ -9,10 +9,13 @@ public class BusConstants {
     public static final String DRIVER_LICENSE_NOT_AVAILABLE = "Driver license information not available.";
     public static final String DRIVER_REGISTER_NUMBER_NOT_AVAILABLE = "Driver registration number not available.";
     public static final String ROUTE_NOT_PROVIDED = "Route information not provided.";
-
     public static final String UPCOMING_MAINTENANCE_DAY = "Upcoming Maintenance Day For This Bus";
-
     public static final String TO_OWNER_MOBILE = "You will get soon information about your bus in you registered mobile number";
+    public static final String ALL_FIELDS_ARE_REQUIRED = "Please ensure that all fields are filled out. It is mandatory to provide information in every field to proceed.";
+    public static final String ALERT_MESSAGE = "Attention: An important message requires your consideration. In case of any bus issues, the owner is responsible for resolution.";
+    public static final String OWNER_ADDED_SUCCESSFULLY = "The owner information has been added successfully.";
+    public static final String OWNER_ALREADY_EXIST = "Owner Already Exists";
+
 
 
 }

@@ -1,4 +1,4 @@
-package com.v3.hub.bus.rider.MHubRide.dto;
+package com.v3.hub.bus.rider.MHubRide.dto.BusDto;
 
 import lombok.Builder;
 import lombok.Data;
