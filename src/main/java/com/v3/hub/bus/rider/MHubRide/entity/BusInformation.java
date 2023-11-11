@@ -23,14 +23,12 @@ public class BusInformation {
     private String modelNumber;
     private int numberOfSeats;
     private String route;
-    private String assignedTo;
     private double fuelCapacity;
     private double mileage;
-    private String maintenanceWeek;
-    private String lastMaintenanceDate;
-    private String insuranceExpiryDate;
+    private String maintenanceToday;
     private String manufacturer;
-    private LocalDateTime localDateTime;
+    private String busAddedDate;
+    private String busAddedTime;
 
     @OneToOne(mappedBy = "busInformation" , cascade = CascadeType.ALL , fetch = FetchType.EAGER)
     @JsonIgnore

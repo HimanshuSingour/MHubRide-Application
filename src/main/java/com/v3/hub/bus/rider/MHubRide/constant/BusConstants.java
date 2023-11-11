@@ -10,5 +10,7 @@ public class BusConstants {
     public static final String DRIVER_REGISTER_NUMBER_NOT_AVAILABLE = "Driver registration number not available.";
     public static final String ROUTE_NOT_PROVIDED = "Route information not provided.";
 
+    public static final String UPCOMING_MAINTENANCE_DAY = "Upcoming Maintenance Day For This Bus";
+
 
 }
