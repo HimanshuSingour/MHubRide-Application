@@ -18,7 +18,7 @@ public class BusInformation {
 
     @Id
     private String busId;
-    private String butInit;
+    private String busInit;
     private String busNumber;
     private String modelNumber;
     private int numberOfSeats;

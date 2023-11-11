@@ -15,6 +15,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 import java.util.UUID;
 
 import static com.v3.hub.bus.rider.MHubRide.constant.BusConstants.*;
@@ -30,6 +31,7 @@ public class BusServiceImpl implements BusService {
     private PassengerRepositories passengerRepositories;
     @Autowired
     private DriverRepositories driverRepositories;
+
     private final LocalDateTime localDateTime = LocalDateTime.now();
 
 
@@ -37,13 +39,13 @@ public class BusServiceImpl implements BusService {
     public BusResponse saveBus(BusInformation busInformation) {
 
         String busIdGenerator = UUID.randomUUID().toString();
-
         LocalDateTime currentDateTime = LocalDate.now().atStartOfDay();
-        LocalDateTime maintenanceDate = currentDateTime.plusDays(60); // M
+        LocalDateTime maintenanceDate = currentDateTime.plusDays(60);
 
         LocalDate currentDate = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
         String formattedDate = currentDate.format(formatter);
+
         BusInformation information = null;
 
         if (busInformation.getRoute().isBlank() || busInformation.getRoute().isEmpty()) {
@@ -54,7 +56,7 @@ public class BusServiceImpl implements BusService {
                     .busId(busIdGenerator)
                     .busNumber("MP51" + "-" + PayLoadsConfig.generateBusNumber())
                     .modelNumber(PayLoadsConfig.generateBusModelNumber())
-                    .butInit(PayLoadsConfig.generateRandomInit())
+                    .busInit(PayLoadsConfig.generateRandomInit())
                     .route(busInformation.getRoute())
                     .busAddedDate(formattedDate)
                     .fuelCapacity(busInformation.getFuelCapacity())
@@ -63,11 +65,12 @@ public class BusServiceImpl implements BusService {
                     .numberOfSeats(80)
                     .busAddedTime(String.valueOf(LocalTime.now()))
                     .manufacturer(PayLoadsConfig.generateRandomBusCompanyName())
-                    .build(); busRepositories.save(information);
+                    .build();
+            busRepositories.save(information);
         }
         return BusResponse.builder()
                 .busNumber(information.getBusNumber())
-                .butInit(information.getButInit())
+                .butInit(information.getBusInit())
                 .busId(information.getBusId())
                 .route(information.getRoute())
                 .maintenanceToday(String.valueOf(currentDateTime))
