@@ -1,7 +1,9 @@
 package com.v3.hub.bus.rider.MHubRide.service;
 
 import com.v3.hub.bus.rider.MHubRide.dto.BusResponse;
+import com.v3.hub.bus.rider.MHubRide.dto.OwnerResponse;
 import com.v3.hub.bus.rider.MHubRide.entity.BusInformation;
+import com.v3.hub.bus.rider.MHubRide.entity.BusOwnerApp;
 import com.v3.hub.bus.rider.MHubRide.exceptions.BusServiceException;
 import com.v3.hub.bus.rider.MHubRide.payloads.PayLoadsConfig;
 import com.v3.hub.bus.rider.MHubRide.repository.*;
@@ -33,6 +35,14 @@ public class BusServiceImpl implements BusService {
 
     private final LocalDateTime localDateTime = LocalDateTime.now();
 
+
+    @Override
+    public OwnerResponse addOwnerInformation(BusOwnerApp busOwnerApp) {
+
+
+
+        return null;
+    }
 
     @Override
     public BusResponse saveBus(BusInformation busInformation) {
