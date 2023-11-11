@@ -4,10 +4,7 @@ import com.v3.hub.bus.rider.MHubRide.dto.BusResponse;
 import com.v3.hub.bus.rider.MHubRide.entity.BusInformation;
 import com.v3.hub.bus.rider.MHubRide.exceptions.BusServiceException;
 import com.v3.hub.bus.rider.MHubRide.payloads.PayLoadsConfig;
-import com.v3.hub.bus.rider.MHubRide.repository.BusRepositories;
-import com.v3.hub.bus.rider.MHubRide.repository.ConductorRepositories;
-import com.v3.hub.bus.rider.MHubRide.repository.DriverRepositories;
-import com.v3.hub.bus.rider.MHubRide.repository.PassengerRepositories;
+import com.v3.hub.bus.rider.MHubRide.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +28,8 @@ public class BusServiceImpl implements BusService {
     private PassengerRepositories passengerRepositories;
     @Autowired
     private DriverRepositories driverRepositories;
+    @Autowired
+    private BusOwnerRepositories busOwnerRepositories;
 
     private final LocalDateTime localDateTime = LocalDateTime.now();
 
@@ -76,7 +75,9 @@ public class BusServiceImpl implements BusService {
                 .maintenanceToday(String.valueOf(currentDateTime))
                 .todayDate(formattedDate)
                 .localTime(LocalTime.parse(String.valueOf(LocalTime.now())))
+                .manufacturer(information.getManufacturer())
                 .message(BUS_ADDED_SUCCESSFULLY)
+                .statusOwner(TO_OWNER_MOBILE)
                 .comingMaintenanceDay(UPCOMING_MAINTENANCE_DAY + " - " + String.valueOf(maintenanceDate))
                 .build();
     }

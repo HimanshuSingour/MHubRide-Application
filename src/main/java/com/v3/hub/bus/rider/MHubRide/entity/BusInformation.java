@@ -30,6 +30,10 @@ public class BusInformation {
     private String busAddedDate;
     private String busAddedTime;
 
+    @ManyToOne
+    @JoinColumn(name = "owner_Id")
+    private BusOwnerApp busOwnerApp;
+
     @OneToOne(mappedBy = "busInformation" , cascade = CascadeType.ALL , fetch = FetchType.EAGER)
     @JsonIgnore
     private ConductorInformation conductorInformation;
@@ -40,7 +44,6 @@ public class BusInformation {
 
     @OneToMany(mappedBy = "busInformation" , cascade = CascadeType.ALL , fetch = FetchType.EAGER)
     @JsonIgnore
-
     private List<PassengerInformation> passengerInformation;
 
 }

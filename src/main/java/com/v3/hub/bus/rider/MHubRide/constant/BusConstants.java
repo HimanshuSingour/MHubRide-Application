@@ -12,5 +12,7 @@ public class BusConstants {
 
     public static final String UPCOMING_MAINTENANCE_DAY = "Upcoming Maintenance Day For This Bus";
 
+    public static final String TO_OWNER_MOBILE = "You will get soon information about your bus in you registered mobile number";
+
 
 }

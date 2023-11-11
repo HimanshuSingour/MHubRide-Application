@@ -18,4 +18,6 @@ public class BusResponse {
     private String todayDate;
     private LocalTime localTime;
     private String message;
+    private String manufacturer;
+    private String statusOwner;
 }
