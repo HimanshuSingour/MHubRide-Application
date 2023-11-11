@@ -40,6 +40,10 @@ public class BusServiceImpl implements BusService {
     @Override
     public OwnerResponse addOwnerInformation(OwnerRequest ownerRequest) {
 
+        LocalDate currentDate = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
+        String formattedDate = currentDate.format(formatter);
+
         if (ownerRequest.getOwnerFirstName().isBlank()
                 || ownerRequest.getOwnerLastName().isBlank()
                 || ownerRequest.getOwnerEmail().isBlank()
@@ -51,9 +55,9 @@ public class BusServiceImpl implements BusService {
             throw new BusServiceException(ALL_FIELDS_ARE_REQUIRED);
         }
 
-        LocalDate currentDate = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
-        String formattedDate = currentDate.format(formatter);
+        if (busOwnerRepositories.existsByOwnerEmail(ownerRequest.getOwnerEmail())) {
+            throw new BusServiceException("Owner with the provided email already exists.");
+        }
 
         BusOwnerApp busOwnerApp = BusOwnerApp.builder()
                 .ownerId(UUID.randomUUID().toString())
