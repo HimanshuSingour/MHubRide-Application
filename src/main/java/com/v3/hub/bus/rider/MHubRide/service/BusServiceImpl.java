@@ -40,10 +40,13 @@ public class BusServiceImpl implements BusService {
     @Override
     public OwnerResponse addOwnerInformation(OwnerRequest ownerRequest) {
 
-        if (ownerRequest.getOwnerFirstName().isBlank() || ownerRequest.getOwnerLastName().isBlank() || ownerRequest.getOwnerEmail().isBlank()
+        if (ownerRequest.getOwnerFirstName().isBlank()
+                || ownerRequest.getOwnerLastName().isBlank()
+                || ownerRequest.getOwnerEmail().isBlank()
                 || ownerRequest.getOwnerContactNumber().isBlank()
-                || ownerRequest.getOwnerAddress().isBlank() || ownerRequest.getOwnerCompany().isBlank() ||
-                ownerRequest.getOwnerAge().isBlank()) {
+                || ownerRequest.getOwnerAddress().isBlank()
+                || ownerRequest.getOwnerCompany().isBlank()
+                || ownerRequest.getOwnerAge().isBlank()) {
 
             throw new BusServiceException(ALL_FIELDS_ARE_REQUIRED);
         }

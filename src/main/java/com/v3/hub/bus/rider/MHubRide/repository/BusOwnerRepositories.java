@@ -10,6 +10,4 @@ import java.util.Optional;
 @Repository
 public interface BusOwnerRepositories extends JpaRepository<BusOwnerApp , String> {
 
-    @Query("SELECT u FROM BusOwnerApp u WHERE u.ownerFirstName = :ownerFirstName")
-    BusOwnerApp findByOwnerName(String ownerFirstName);
 }
