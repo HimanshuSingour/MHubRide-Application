@@ -36,6 +36,21 @@ public class PayLoadsConfig {
         return String.format("%s-%s-%03d", prefix, randomPart, serialNumber);
     }
 
+    public static String generateLicenseNumber() {
+
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        int length = 10;
+        StringBuilder licenseNumber = new StringBuilder();
+        Random random = new Random();
+        for (int i = 0; i < length; i++) {
+            int randomIndex = random.nextInt(characters.length());
+            char randomChar = characters.charAt(randomIndex);
+            licenseNumber.append(randomChar);
+        }
+
+        return licenseNumber.toString();
+    }
+
     public static String generateRandomInit() {
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         StringBuilder randomString = new StringBuilder(7);

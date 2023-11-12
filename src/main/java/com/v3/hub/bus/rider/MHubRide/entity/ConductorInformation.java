@@ -17,11 +17,12 @@ import java.util.Date;
 public class ConductorInformation {
 
     @Id
-    private String driverId;
-    private String driverName;
-    private String licenseNumber;
-    private Date dateOfBirth;
-    private String note;
+    private String conductorId;
+    private int busId;
+    private String conductorName;
+    private String conductorLicenseNumber;
+    private Date conductorDateOfBirth;
+    private String conductorNote;
 
     @OneToOne
     @JoinColumn(name = "bus_FK")

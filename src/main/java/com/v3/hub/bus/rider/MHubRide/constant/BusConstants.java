@@ -21,5 +21,6 @@ public class BusConstants {
     public static final String OWNER_PHONE_EXIST = "Owner with the provided contact number already exists.";
     public static final String BUS_ALREADY_EXIST = "This bus is already exists";
     public static final String OWNER_NOT_FOUND = "Owner Details not found";
+    public static final String CONDUCTOR_ADDED_SUCCESSFULLY = "Conductor added successfully";
 
 }

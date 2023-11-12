@@ -2,12 +2,15 @@ package com.v3.hub.bus.rider.MHubRide.service;
 
 import com.v3.hub.bus.rider.MHubRide.dto.BusDto.BusRequest;
 import com.v3.hub.bus.rider.MHubRide.dto.BusDto.BusResponse;
+import com.v3.hub.bus.rider.MHubRide.dto.ConductorDto.ConductorRequest;
+import com.v3.hub.bus.rider.MHubRide.dto.ConductorDto.ConductorResponse;
 import com.v3.hub.bus.rider.MHubRide.dto.OwnerDto.OwnerRequest;
 import com.v3.hub.bus.rider.MHubRide.dto.OwnerDto.OwnerResponse;
 import com.v3.hub.bus.rider.MHubRide.dto.OwnerInforDto.OwnerInfoRequest;
 import com.v3.hub.bus.rider.MHubRide.dto.OwnerInforDto.OwnerInfoResponse;
 import com.v3.hub.bus.rider.MHubRide.entity.BusInformation;
 import com.v3.hub.bus.rider.MHubRide.entity.BusOwnerApp;
+import com.v3.hub.bus.rider.MHubRide.entity.ConductorInformation;
 import com.v3.hub.bus.rider.MHubRide.exceptions.BusServiceException;
 import com.v3.hub.bus.rider.MHubRide.payloads.PayLoadsConfig;
 import com.v3.hub.bus.rider.MHubRide.repository.*;
@@ -40,7 +43,7 @@ public class BusServiceImpl implements BusService {
 
 
     @Override
-    public OwnerResponse addOwnerInformation(OwnerRequest ownerRequest) {
+    public OwnerResponse addOwner(OwnerRequest ownerRequest) {
 
         if (ownerRequest.getOwnerFirstName().isBlank()
                 || ownerRequest.getOwnerLastName().isBlank()
@@ -174,8 +177,6 @@ public class BusServiceImpl implements BusService {
             List<BusInformation> busInformationList = busRepositories.findByOwnerId(ownerApp.getOwnerId());
             ownerApp.setBusInformation(busInformationList);
 
-            // Convert to response DTO
-
             return OwnerInfoResponse.builder()
                     .ownerId(ownerApp.getOwnerId())
                     .ownerFirstName(ownerApp.getOwnerFirstName())
@@ -198,7 +199,50 @@ public class BusServiceImpl implements BusService {
         }
 
     }
+
+    @Override
+    public ConductorResponse saveConductor(ConductorRequest conductorRequest) {
+
+        if (conductorRequest.getDriverId() == null || conductorRequest.getDriverName() == null
+                || conductorRequest.getDateOfBirth() == null || conductorRequest.getBusId() == null) {
+            throw new BusServiceException(ALL_FIELDS_ARE_REQUIRED);
+        }
+
+        ConductorInformation conductor = null;
+
+        Optional<BusInformation> busInformation = busRepositories.findById(Integer.valueOf(conductorRequest.getBusId()));
+        if (busInformation.isPresent()) {
+            BusInformation information = busInformation.get();
+            Optional<ConductorInformation> conductorInformation = conductorRepositories.findById(conductorRequest.getBusId());
+            if (conductorInformation.isEmpty()) {
+                conductor = ConductorInformation.builder()
+                        .driverId(conductorRequest.getDriverId())
+                        .driverName(conductorRequest.getDriverName())
+                        .dateOfBirth(conductorRequest.getDateOfBirth())
+                        .busInformation(information)
+                        .licenseNumber(PayLoadsConfig.generateLicenseNumber())
+                        .busId(conductorRequest.getBusId())
+                        .note(CONDUCTOR_ADDED_SUCCESSFULLY)
+                        .build(); conductorRepositories.save(conductor);
+            } else {
+                throw new BusServiceException(BUS_ALREADY_EXIST);
+            }
+        }
+
+        assert conductor != null;
+        return ConductorResponse.builder()
+                .licenseNumber(conductor.getLicenseNumber())
+                .busId(conductor.getBusId())
+                .dateOfBirth(conductor.getDateOfBirth())
+                .status("ACTIVE")
+                .driverId(conductor.getDriverId())
+                .driverName(conductor.getDriverName())
+                .note(conductor.getNote())
+                .build();
+
+    }
 }
+
 
 
 

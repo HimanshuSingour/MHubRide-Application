@@ -2,6 +2,8 @@ package com.v3.hub.bus.rider.MHubRide.controller;
 
 import com.v3.hub.bus.rider.MHubRide.dto.BusDto.BusRequest;
 import com.v3.hub.bus.rider.MHubRide.dto.BusDto.BusResponse;
+import com.v3.hub.bus.rider.MHubRide.dto.ConductorDto.ConductorRequest;
+import com.v3.hub.bus.rider.MHubRide.dto.ConductorDto.ConductorResponse;
 import com.v3.hub.bus.rider.MHubRide.dto.OwnerDto.OwnerRequest;
 import com.v3.hub.bus.rider.MHubRide.dto.OwnerDto.OwnerResponse;
 import com.v3.hub.bus.rider.MHubRide.dto.OwnerInforDto.OwnerInfoRequest;
@@ -22,8 +24,8 @@ public class BusController {
     private BusService busService;
 
     @PostMapping("/add-owner")
-    ResponseEntity<OwnerResponse> addBus(@RequestBody OwnerRequest busInformation){
-        OwnerResponse response = busService.addOwnerInformation(busInformation);
+    ResponseEntity<OwnerResponse> addOwner(@RequestBody OwnerRequest busInformation){
+        OwnerResponse response = busService.addOwner(busInformation);
         return new ResponseEntity<OwnerResponse>(response , HttpStatus.CREATED);
 
     }
@@ -31,6 +33,13 @@ public class BusController {
     ResponseEntity<BusResponse> addBus(@RequestBody BusRequest busRequest){
         BusResponse response = busService.saveBus(busRequest);
         return new ResponseEntity<BusResponse>(response , HttpStatus.CREATED);
+
+    }
+
+    @PostMapping("/add-conductor")
+    ResponseEntity<ConductorResponse> addBus(@RequestBody ConductorRequest conductorRequest){
+        ConductorResponse response = busService.saveConductor(conductorRequest);
+        return new ResponseEntity<ConductorResponse>(response , HttpStatus.CREATED);
 
     }
 

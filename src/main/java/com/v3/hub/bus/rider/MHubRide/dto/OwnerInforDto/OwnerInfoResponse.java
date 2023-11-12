@@ -1,6 +1,7 @@
 package com.v3.hub.bus.rider.MHubRide.dto.OwnerInforDto;
 
 import com.v3.hub.bus.rider.MHubRide.entity.BusInformation;
+import com.v3.hub.bus.rider.MHubRide.entity.ConductorInformation;
 import lombok.Builder;
 import lombok.Data;
 
@@ -26,4 +27,6 @@ public class OwnerInfoResponse {
     private String note;;
 
     private List<BusInformation> busInformation;
+
+    private ConductorInformation conductorInformation;
 }
