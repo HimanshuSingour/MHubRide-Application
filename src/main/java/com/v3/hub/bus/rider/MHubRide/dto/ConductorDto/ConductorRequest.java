@@ -11,7 +11,7 @@ import java.util.Date;
 @NoArgsConstructor
 public class ConductorRequest {
 
-    private String driverId;
+    private String conductorId;
     private String busId;
     private String driverName;
     private String licenseNumber;

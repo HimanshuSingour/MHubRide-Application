@@ -203,7 +203,7 @@ public class BusServiceImpl implements BusService {
     @Override
     public ConductorResponse saveConductor(ConductorRequest conductorRequest) {
 
-        if (conductorRequest.getDriverId() == null || conductorRequest.getDriverName() == null
+        if (conductorRequest.getConductorId() == null || conductorRequest.getDriverName() == null
                 || conductorRequest.getDateOfBirth() == null || conductorRequest.getBusId() == null) {
             throw new BusServiceException(ALL_FIELDS_ARE_REQUIRED);
         }
@@ -216,13 +216,13 @@ public class BusServiceImpl implements BusService {
             Optional<ConductorInformation> conductorInformation = conductorRepositories.findById(conductorRequest.getBusId());
             if (conductorInformation.isEmpty()) {
                 conductor = ConductorInformation.builder()
-                        .driverId(conductorRequest.getDriverId())
-                        .driverName(conductorRequest.getDriverName())
-                        .dateOfBirth(conductorRequest.getDateOfBirth())
+                        .conductorId(conductorRequest.getConductorId())
+                        .conductorName(conductorRequest.getDriverName())
+                        .conductorDateOfBirth(conductorRequest.getDateOfBirth())
                         .busInformation(information)
-                        .licenseNumber(PayLoadsConfig.generateLicenseNumber())
-                        .busId(conductorRequest.getBusId())
-                        .note(CONDUCTOR_ADDED_SUCCESSFULLY)
+                        .conductorLicenseNumber(PayLoadsConfig.generateLicenseNumber())
+                        .busId(Integer.parseInt(conductorRequest.getBusId()))
+                        .conductorNote(CONDUCTOR_ADDED_SUCCESSFULLY)
                         .build(); conductorRepositories.save(conductor);
             } else {
                 throw new BusServiceException(BUS_ALREADY_EXIST);
@@ -231,13 +231,13 @@ public class BusServiceImpl implements BusService {
 
         assert conductor != null;
         return ConductorResponse.builder()
-                .licenseNumber(conductor.getLicenseNumber())
-                .busId(conductor.getBusId())
-                .dateOfBirth(conductor.getDateOfBirth())
+                .licenseNumber(conductor.getConductorLicenseNumber())
+                .busId(String.valueOf(conductor.getBusId()))
+                .dateOfBirth(conductor.getConductorDateOfBirth())
                 .status("ACTIVE")
-                .driverId(conductor.getDriverId())
-                .driverName(conductor.getDriverName())
-                .note(conductor.getNote())
+                .conductorId(conductor.getConductorId())
+                .driverName(conductor.getConductorName())
+                .note(conductor.getConductorNote())
                 .build();
 
     }

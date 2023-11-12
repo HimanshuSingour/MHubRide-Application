@@ -9,7 +9,7 @@ import java.util.Date;
 @Data
 public class ConductorResponse {
 
-    private String driverId;
+    private String conductorId;
     private String busId;
     private String driverName;
     private String licenseNumber;
