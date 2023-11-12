@@ -4,13 +4,17 @@ import com.v3.hub.bus.rider.MHubRide.dto.BusDto.BusRequest;
 import com.v3.hub.bus.rider.MHubRide.dto.BusDto.BusResponse;
 import com.v3.hub.bus.rider.MHubRide.dto.ConductorDto.ConductorRequest;
 import com.v3.hub.bus.rider.MHubRide.dto.ConductorDto.ConductorResponse;
+import com.v3.hub.bus.rider.MHubRide.dto.DriverDto.DriverRequest;
+import com.v3.hub.bus.rider.MHubRide.dto.DriverDto.DriverResponse;
 import com.v3.hub.bus.rider.MHubRide.dto.OwnerDto.OwnerRequest;
 import com.v3.hub.bus.rider.MHubRide.dto.OwnerDto.OwnerResponse;
 import com.v3.hub.bus.rider.MHubRide.dto.OwnerInforDto.OwnerInfoRequest;
 import com.v3.hub.bus.rider.MHubRide.dto.OwnerInforDto.OwnerInfoResponse;
+import com.v3.hub.bus.rider.MHubRide.dto.PassengerDto.PassengerResponse;
 import com.v3.hub.bus.rider.MHubRide.entity.BusInformation;
 import com.v3.hub.bus.rider.MHubRide.entity.BusOwnerApp;
 import com.v3.hub.bus.rider.MHubRide.entity.ConductorInformation;
+import com.v3.hub.bus.rider.MHubRide.entity.DriverInformation;
 import com.v3.hub.bus.rider.MHubRide.exceptions.BusServiceException;
 import com.v3.hub.bus.rider.MHubRide.payloads.PayLoadsConfig;
 import com.v3.hub.bus.rider.MHubRide.repository.*;
@@ -106,7 +110,7 @@ public class BusServiceImpl implements BusService {
     }
 
     @Override
-    public BusResponse saveBus(BusRequest busRequest) {
+    public BusResponse addBus(BusRequest busRequest) {
 
         LocalDateTime currentDateTime = LocalDate.now().atStartOfDay();
         LocalDateTime maintenanceDate = currentDateTime.plusDays(60);
@@ -201,7 +205,7 @@ public class BusServiceImpl implements BusService {
     }
 
     @Override
-    public ConductorResponse saveConductor(ConductorRequest conductorRequest) {
+    public ConductorResponse addConductor(ConductorRequest conductorRequest) {
 
         if (conductorRequest.getConductorId() == null || conductorRequest.getDriverName() == null
                 || conductorRequest.getDateOfBirth() == null || conductorRequest.getBusId() == null) {
@@ -223,7 +227,8 @@ public class BusServiceImpl implements BusService {
                         .conductorLicenseNumber(PayLoadsConfig.generateLicenseNumber())
                         .busId(Integer.parseInt(conductorRequest.getBusId()))
                         .conductorNote(CONDUCTOR_ADDED_SUCCESSFULLY)
-                        .build(); conductorRepositories.save(conductor);
+                        .build();
+                conductorRepositories.save(conductor);
             } else {
                 throw new BusServiceException(BUS_ALREADY_EXIST);
             }
@@ -241,7 +246,73 @@ public class BusServiceImpl implements BusService {
                 .build();
 
     }
+
+    @Override
+    public PassengerResponse addPassenger(PassengerResponse passengerResponse) {
+
+
+        return null;
+    }
+
+    @Override
+    public DriverResponse addDriver(DriverRequest driverRequest) {
+
+        if (driverRequest.getDriverId() == null || driverRequest.getDriverName() == null) {
+            throw new BusServiceException(ALL_FIELDS_ARE_REQUIRED);
+        }
+
+        DriverInformation driver = null;
+
+        Optional<BusInformation> busInformation = busRepositories.findById(Integer.valueOf(driverRequest.getDriverId()));
+        if (busInformation.isPresent()) {
+            BusInformation information = busInformation.get();
+            Optional<DriverInformation> driverInformation = driverRepositories.findById(driverRequest.getDriverId());
+            if (driverInformation.isEmpty()) {
+                driver = DriverInformation.builder()
+                        .driverId(driverRequest.getDriverId())
+                        .busId(driverRequest.getBusId())
+                        .driverName(driverRequest.getDriverName())
+                        .busInformation(information)
+                        .licenseNumber(PayLoadsConfig.generateLicenseNumber())
+                        .dateOfBirth(driverRequest.getDateOfBirth())
+                        .contactNumber(driverRequest.getContactNumber())
+                        .address(driverRequest.getAddress())
+                        .registrationNumber(driverRequest.getRegistrationNumber())
+                        .insurancePolicyNumber(driverRequest.getInsurancePolicyNumber())
+                        .emergencyContactName(driverRequest.getEmergencyContactNumber())
+                        .emergencyContactNumber(driverRequest.getContactNumber())
+                        .bloodType(driverRequest.getBloodType())
+                        .specialSkills(driverRequest.getSpecialSkills())
+                        .notes(DRIVER_HAS_BEEN_ADDED)
+                        .build(); driverRepositories.save(driver);
+            } else {
+                throw new BusServiceException(BUS_ALREADY_EXIST);
+            }
+        }
+
+        assert driver != null;
+        return DriverResponse.builder()
+                .driverId(driver.getDriverId())
+                .busId(String.valueOf(driver.getBusId()))
+                .driverName(driver.getDriverName())
+                .licenseNumber(driver.getLicenseNumber())
+                .dateOfBirth(driver.getDateOfBirth())
+                .contactNumber(driver.getContactNumber())
+                .address(driver.getAddress())
+                .registrationNumber(driver.getRegistrationNumber())
+                .insurancePolicyNumber(driver.getInsurancePolicyNumber())
+                .emergencyContactName(driver.getEmergencyContactName())
+                .emergencyContactNumber(driver.getEmergencyContactNumber())
+                .bloodType(driver.getBloodType())
+                .specialSkills(driver.getSpecialSkills())
+                .notes(driver.getNotes())
+                .status("ACTIVE")
+                .build();
+    }
+
 }
+
+
 
 
 

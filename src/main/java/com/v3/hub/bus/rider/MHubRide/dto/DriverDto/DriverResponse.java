@@ -1,6 +1,5 @@
-package com.v3.hub.bus.rider.MHubRide.entity;
+package com.v3.hub.bus.rider.MHubRide.dto.DriverDto;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,13 +11,10 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Entity
-@Table(name = "DRIVER_INFO")
-public class DriverInformation {
+public class DriverResponse {
 
-    @Id
     private String driverId;
-    private int busId;
+    private String busId;
     private String driverName;
     private String licenseNumber;
     private Date dateOfBirth;
@@ -31,8 +27,5 @@ public class DriverInformation {
     private String bloodType;
     private String specialSkills;
     private String notes;
-
-    @OneToOne
-    @JoinColumn(name = "bus_FK")
-    private BusInformation busInformation;
+    private String status;
 }

@@ -4,6 +4,8 @@ import com.v3.hub.bus.rider.MHubRide.dto.BusDto.BusRequest;
 import com.v3.hub.bus.rider.MHubRide.dto.BusDto.BusResponse;
 import com.v3.hub.bus.rider.MHubRide.dto.ConductorDto.ConductorRequest;
 import com.v3.hub.bus.rider.MHubRide.dto.ConductorDto.ConductorResponse;
+import com.v3.hub.bus.rider.MHubRide.dto.DriverDto.DriverRequest;
+import com.v3.hub.bus.rider.MHubRide.dto.DriverDto.DriverResponse;
 import com.v3.hub.bus.rider.MHubRide.dto.OwnerDto.OwnerRequest;
 import com.v3.hub.bus.rider.MHubRide.dto.OwnerDto.OwnerResponse;
 import com.v3.hub.bus.rider.MHubRide.dto.OwnerInforDto.OwnerInfoRequest;
@@ -29,17 +31,25 @@ public class BusController {
         return new ResponseEntity<OwnerResponse>(response , HttpStatus.CREATED);
 
     }
+
     @PostMapping("/add-bus")
     ResponseEntity<BusResponse> addBus(@RequestBody BusRequest busRequest){
-        BusResponse response = busService.saveBus(busRequest);
+        BusResponse response = busService.addBus(busRequest);
         return new ResponseEntity<BusResponse>(response , HttpStatus.CREATED);
 
     }
 
     @PostMapping("/add-conductor")
-    ResponseEntity<ConductorResponse> addBus(@RequestBody ConductorRequest conductorRequest){
-        ConductorResponse response = busService.saveConductor(conductorRequest);
+    ResponseEntity<ConductorResponse> addConductor(@RequestBody ConductorRequest conductorRequest){
+        ConductorResponse response = busService.addConductor(conductorRequest);
         return new ResponseEntity<ConductorResponse>(response , HttpStatus.CREATED);
+
+    }
+
+    @PostMapping("/add-driver")
+    ResponseEntity<DriverResponse> addDriver(@RequestBody DriverRequest driverRequest){
+        DriverResponse response = busService.addDriver(driverRequest);
+        return new ResponseEntity<DriverResponse>(response , HttpStatus.CREATED);
 
     }
 

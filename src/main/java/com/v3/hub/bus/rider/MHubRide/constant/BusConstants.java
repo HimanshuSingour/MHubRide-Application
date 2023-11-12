@@ -22,5 +22,5 @@ public class BusConstants {
     public static final String BUS_ALREADY_EXIST = "This bus is already exists";
     public static final String OWNER_NOT_FOUND = "Owner Details not found";
     public static final String CONDUCTOR_ADDED_SUCCESSFULLY = "Conductor added successfully";
-
+    public static final String DRIVER_HAS_BEEN_ADDED = "Driver has been added successfully";
 }
