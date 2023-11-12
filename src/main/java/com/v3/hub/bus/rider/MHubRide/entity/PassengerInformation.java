@@ -18,8 +18,8 @@ public class PassengerInformation {
 
     @Id
     private String passengerId;
+    private int busId;
     private String passengerName;
-    private String passportNumber;
     private String contactNumber;
     private String seatNumber;
     private String ticketNumber;

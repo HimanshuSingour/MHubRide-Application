@@ -23,4 +23,6 @@ public class BusConstants {
     public static final String OWNER_NOT_FOUND = "Owner Details not found";
     public static final String CONDUCTOR_ADDED_SUCCESSFULLY = "Conductor added successfully";
     public static final String DRIVER_HAS_BEEN_ADDED = "Driver has been added successfully";
+    public static final String PASSENGER_ADDED = "Passenger has been added successfully";
+    public static final String PASSENGER_ALREADY_BOOKED = "Passenger has been booked already";
 }

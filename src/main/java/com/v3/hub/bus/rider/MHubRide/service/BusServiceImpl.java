@@ -10,11 +10,9 @@ import com.v3.hub.bus.rider.MHubRide.dto.OwnerDto.OwnerRequest;
 import com.v3.hub.bus.rider.MHubRide.dto.OwnerDto.OwnerResponse;
 import com.v3.hub.bus.rider.MHubRide.dto.OwnerInforDto.OwnerInfoRequest;
 import com.v3.hub.bus.rider.MHubRide.dto.OwnerInforDto.OwnerInfoResponse;
+import com.v3.hub.bus.rider.MHubRide.dto.PassengerDto.PassengerRequest;
 import com.v3.hub.bus.rider.MHubRide.dto.PassengerDto.PassengerResponse;
-import com.v3.hub.bus.rider.MHubRide.entity.BusInformation;
-import com.v3.hub.bus.rider.MHubRide.entity.BusOwnerApp;
-import com.v3.hub.bus.rider.MHubRide.entity.ConductorInformation;
-import com.v3.hub.bus.rider.MHubRide.entity.DriverInformation;
+import com.v3.hub.bus.rider.MHubRide.entity.*;
 import com.v3.hub.bus.rider.MHubRide.exceptions.BusServiceException;
 import com.v3.hub.bus.rider.MHubRide.payloads.PayLoadsConfig;
 import com.v3.hub.bus.rider.MHubRide.repository.*;
@@ -248,10 +246,45 @@ public class BusServiceImpl implements BusService {
     }
 
     @Override
-    public PassengerResponse addPassenger(PassengerResponse passengerResponse) {
+    public PassengerResponse addPassenger(PassengerRequest passengerRequest) {
 
+        if (passengerRequest.getPassengerName() == null || passengerRequest.getContactNumber() == null) {
+            throw new BusServiceException(ALL_FIELDS_ARE_REQUIRED);
+        }
 
-        return null;
+        PassengerInformation passengerInformation = null;
+        BusInformation information = null;
+
+        Optional<BusInformation> busInformation = busRepositories.findById(passengerRequest.getBusId());
+        if (busInformation.isPresent()) {
+            information = busInformation.get();
+            Optional<PassengerInformation> Information = passengerRepositories.findById(passengerRequest.getPassengerId());
+            if (Information.isEmpty()) {
+
+                passengerInformation = PassengerInformation.builder()
+                        .passengerId(passengerRequest.getPassengerId())
+                        .passengerName(passengerRequest.getPassengerName())
+                        .seatNumber(PayLoadsConfig.generateSeatNumber())
+                        .ticketNumber(PayLoadsConfig.generateBusTicketNumber())
+                        .busId(passengerRequest.getBusId())
+                        .busInformation(information)
+                        .contactNumber(passengerRequest.getContactNumber())
+                        .notes(PASSENGER_ADDED)
+                        .build();
+                passengerRepositories.save(passengerInformation);
+            } else {
+                throw new BusServiceException(PASSENGER_ALREADY_BOOKED);
+            }
+        }
+
+        assert passengerInformation != null;
+        return PassengerResponse.builder()
+                .passengerId(passengerRequest.getPassengerId())
+                .busId(passengerInformation.getBusId())
+                .passengerName(passengerInformation.getPassengerName())
+                .contactNumber(passengerInformation.getContactNumber())
+                .notes(PASSENGER_ADDED)
+                .build();
     }
 
     @Override
@@ -284,7 +317,8 @@ public class BusServiceImpl implements BusService {
                         .bloodType(driverRequest.getBloodType())
                         .specialSkills(driverRequest.getSpecialSkills())
                         .notes(DRIVER_HAS_BEEN_ADDED)
-                        .build(); driverRepositories.save(driver);
+                        .build();
+                driverRepositories.save(driver);
             } else {
                 throw new BusServiceException(BUS_ALREADY_EXIST);
             }

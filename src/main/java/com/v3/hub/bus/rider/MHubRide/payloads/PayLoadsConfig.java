@@ -51,6 +51,41 @@ public class PayLoadsConfig {
         return licenseNumber.toString();
     }
 
+    public static String generateSeatNumber() {
+        // Define arrays of seat rows and seat letters
+        int[] seatRows = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};  // Assuming there are 10 rows
+        char[] seatLetters = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'};  // Assuming there are 10 letters
+
+        Random random = new Random();
+
+        int randomRowIndex = random.nextInt(seatRows.length);
+        int randomLetterIndex = random.nextInt(seatLetters.length);
+
+        int randomRow = seatRows[randomRowIndex];
+        char randomLetter = seatLetters[randomLetterIndex];
+
+        String seatNumber = Integer.toString(randomRow) + randomLetter;
+
+        return seatNumber;
+    }
+
+    public static String generateBusTicketNumber() {
+
+        String allowedCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        int ticketNumberLength = 7;
+        StringBuilder ticketNumberBuilder = new StringBuilder(ticketNumberLength);
+        Random random = new Random();
+
+        // Generate the ticket number
+        for (int i = 0; i < ticketNumberLength; i++) {
+            int randomIndex = random.nextInt(allowedCharacters.length());
+            char randomChar = allowedCharacters.charAt(randomIndex);
+            ticketNumberBuilder.append(randomChar);
+        }
+
+        return ticketNumberBuilder.toString();
+    }
+
     public static String generateRandomInit() {
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         StringBuilder randomString = new StringBuilder(7);

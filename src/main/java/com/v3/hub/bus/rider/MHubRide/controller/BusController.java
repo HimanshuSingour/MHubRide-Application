@@ -10,6 +10,8 @@ import com.v3.hub.bus.rider.MHubRide.dto.OwnerDto.OwnerRequest;
 import com.v3.hub.bus.rider.MHubRide.dto.OwnerDto.OwnerResponse;
 import com.v3.hub.bus.rider.MHubRide.dto.OwnerInforDto.OwnerInfoRequest;
 import com.v3.hub.bus.rider.MHubRide.dto.OwnerInforDto.OwnerInfoResponse;
+import com.v3.hub.bus.rider.MHubRide.dto.PassengerDto.PassengerRequest;
+import com.v3.hub.bus.rider.MHubRide.dto.PassengerDto.PassengerResponse;
 import com.v3.hub.bus.rider.MHubRide.entity.BusInformation;
 import com.v3.hub.bus.rider.MHubRide.entity.BusOwnerApp;
 import com.v3.hub.bus.rider.MHubRide.service.BusService;
@@ -50,6 +52,13 @@ public class BusController {
     ResponseEntity<DriverResponse> addDriver(@RequestBody DriverRequest driverRequest){
         DriverResponse response = busService.addDriver(driverRequest);
         return new ResponseEntity<DriverResponse>(response , HttpStatus.CREATED);
+
+    }
+
+    @PostMapping("/add-passenger")
+    ResponseEntity<PassengerResponse> addPassenger(@RequestBody PassengerRequest passengerRequest){
+        PassengerResponse response = busService.addPassenger(passengerRequest);
+        return new ResponseEntity<PassengerResponse>(response , HttpStatus.CREATED);
 
     }
 

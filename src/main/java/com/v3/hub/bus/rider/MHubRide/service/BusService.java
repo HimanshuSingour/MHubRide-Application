@@ -21,7 +21,7 @@ public interface BusService {
     OwnerResponse addOwner(OwnerRequest ownerRequest);
     BusResponse addBus(BusRequest busRequest);
     ConductorResponse addConductor(ConductorRequest conductorRequest);
-    PassengerResponse addPassenger(PassengerResponse passengerResponse);
+    PassengerResponse addPassenger(PassengerRequest passengerRequest);
     DriverResponse addDriver(DriverRequest driverRequest);
     OwnerInfoResponse getOwnerInfo(String ownerId ,String ownerContactNumber ,String ownerEmail);
 
