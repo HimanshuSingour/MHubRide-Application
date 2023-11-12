@@ -175,7 +175,8 @@ public class BusServiceImpl implements BusService {
             ownerApp.setBusInformation(busInformationList);
 
             // Convert to response DTO
-            OwnerInfoResponse response = OwnerInfoResponse.builder()
+
+            return OwnerInfoResponse.builder()
                     .ownerId(ownerApp.getOwnerId())
                     .ownerFirstName(ownerApp.getOwnerFirstName())
                     .ownerLastName(ownerApp.getOwnerLastName())
@@ -192,8 +193,6 @@ public class BusServiceImpl implements BusService {
                     .note(ownerApp.getNote())
                     .busInformation(ownerApp.getBusInformation())
                     .build();
-
-            return response;
         } else {
             throw new BusServiceException("Id is not available");
         }
