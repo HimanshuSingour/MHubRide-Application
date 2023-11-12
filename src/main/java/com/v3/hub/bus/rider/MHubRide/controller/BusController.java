@@ -57,7 +57,7 @@ public class BusController {
 
     @PostMapping("/add-passenger")
     ResponseEntity<PassengerResponse> addPassenger(@RequestBody PassengerRequest passengerRequest) {
-        PassengerResponse response = busService.addPassenger(passengerRequest);
+        PassengerResponse response = busService.bookASeat(passengerRequest);
         return new ResponseEntity<PassengerResponse>(response, HttpStatus.CREATED);
 
     }

@@ -294,7 +294,7 @@ public class BusServiceImpl implements BusService {
     }
 
     @Override
-    public PassengerResponse addPassenger(PassengerRequest passengerRequest) {
+    public PassengerResponse bookASeat(PassengerRequest passengerRequest) {
 
         if (passengerRequest.getPassengerName() == null || passengerRequest.getContactNumber() == null) {
             throw new BusServiceException(ALL_FIELDS_ARE_REQUIRED);
