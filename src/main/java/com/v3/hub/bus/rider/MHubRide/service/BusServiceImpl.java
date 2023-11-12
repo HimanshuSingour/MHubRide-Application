@@ -203,6 +203,54 @@ public class BusServiceImpl implements BusService {
     }
 
     @Override
+    public PassengerResponse getPassengerInfo(String passengerId) {
+
+        if (passengerId.isBlank()) {
+            throw new BusServiceException(ALL_FIELDS_ARE_REQUIRED);
+        }
+        if (passengerId.startsWith("\\d+")) {
+            throw new BusServiceException(PASSENGER_ID_START_WITH_ONLY_NUMERIC_VALUE);
+        }
+
+        BusInformation businfo = null;
+        DriverInformation driverInformation = null;
+        ConductorInformation condInfo = null;
+
+        Optional<PassengerInformation> passInfo = passengerRepositories.findById(passengerId);
+
+        if (passInfo.isPresent()) {
+            PassengerInformation passengerInformation = passInfo.get();
+            Optional<BusInformation> busInformation = busRepositories.findById(passengerInformation.getBusId());
+            if (busInformation.isPresent()) {
+                businfo = busInformation.get();
+
+                Optional<DriverInformation> driverInfo = driverRepositories.findById(String.valueOf(passengerInformation.getBusId()));
+                if (driverInfo.isPresent()) {
+                    driverInformation = driverInfo.get();
+
+                    Optional<ConductorInformation> conductorInformation = conductorRepositories.findById(String.valueOf(passengerInformation.getBusId()));
+                    if (conductorInformation.isPresent()) {
+                        condInfo = conductorInformation.get();
+                    }
+                }
+
+            }
+            return PassengerResponse.builder()
+                    .passengerName(passengerInformation.getPassengerName())
+                    .busId(passengerInformation.getBusId())
+                    .passengerId(passengerInformation.getPassengerId())
+                    .busInformation(businfo)
+                    .conductorInformation(condInfo)
+                    .driverInformation(driverInformation)
+                    .contactNumber(passengerInformation.getContactNumber())
+                    .notes(passengerInformation.getNotes())
+                    .build();
+
+        }
+        throw new BusServiceException(PASSENGER_NOT_FOUND);
+    }
+
+    @Override
     public ConductorResponse addConductor(ConductorRequest conductorRequest) {
 
         if (conductorRequest.getConductorId() == null || conductorRequest.getDriverName() == null

@@ -28,46 +28,51 @@ public class BusController {
     private BusService busService;
 
     @PostMapping("/add-owner")
-    ResponseEntity<OwnerResponse> addOwner(@RequestBody OwnerRequest busInformation){
+    ResponseEntity<OwnerResponse> addOwner(@RequestBody OwnerRequest busInformation) {
         OwnerResponse response = busService.addOwner(busInformation);
-        return new ResponseEntity<OwnerResponse>(response , HttpStatus.CREATED);
+        return new ResponseEntity<OwnerResponse>(response, HttpStatus.CREATED);
 
     }
 
     @PostMapping("/add-bus")
-    ResponseEntity<BusResponse> addBus(@RequestBody BusRequest busRequest){
+    ResponseEntity<BusResponse> addBus(@RequestBody BusRequest busRequest) {
         BusResponse response = busService.addBus(busRequest);
-        return new ResponseEntity<BusResponse>(response , HttpStatus.CREATED);
+        return new ResponseEntity<BusResponse>(response, HttpStatus.CREATED);
 
     }
 
     @PostMapping("/add-conductor")
-    ResponseEntity<ConductorResponse> addConductor(@RequestBody ConductorRequest conductorRequest){
+    ResponseEntity<ConductorResponse> addConductor(@RequestBody ConductorRequest conductorRequest) {
         ConductorResponse response = busService.addConductor(conductorRequest);
-        return new ResponseEntity<ConductorResponse>(response , HttpStatus.CREATED);
+        return new ResponseEntity<ConductorResponse>(response, HttpStatus.CREATED);
 
     }
 
     @PostMapping("/add-driver")
-    ResponseEntity<DriverResponse> addDriver(@RequestBody DriverRequest driverRequest){
+    ResponseEntity<DriverResponse> addDriver(@RequestBody DriverRequest driverRequest) {
         DriverResponse response = busService.addDriver(driverRequest);
-        return new ResponseEntity<DriverResponse>(response , HttpStatus.CREATED);
+        return new ResponseEntity<DriverResponse>(response, HttpStatus.CREATED);
 
     }
 
     @PostMapping("/add-passenger")
-    ResponseEntity<PassengerResponse> addPassenger(@RequestBody PassengerRequest passengerRequest){
+    ResponseEntity<PassengerResponse> addPassenger(@RequestBody PassengerRequest passengerRequest) {
         PassengerResponse response = busService.addPassenger(passengerRequest);
-        return new ResponseEntity<PassengerResponse>(response , HttpStatus.CREATED);
+        return new ResponseEntity<PassengerResponse>(response, HttpStatus.CREATED);
 
     }
 
     @GetMapping("/get/info/{ownerId}/{ownerContactNumber}/{ownerEmail}")
-    ResponseEntity<OwnerInfoResponse> getOwnerInfo(@PathVariable String ownerId , @PathVariable String ownerContactNumber , @PathVariable String ownerEmail){
-        OwnerInfoResponse response = busService.getOwnerInfo(ownerId , ownerEmail , ownerContactNumber);
-        return new ResponseEntity<OwnerInfoResponse>(response , HttpStatus.CREATED);
+    ResponseEntity<OwnerInfoResponse> getOwnerInfo(@PathVariable String ownerId, @PathVariable String ownerContactNumber, @PathVariable String ownerEmail) {
+        OwnerInfoResponse response = busService.getOwnerInfo(ownerId, ownerEmail, ownerContactNumber);
+        return new ResponseEntity<OwnerInfoResponse>(response, HttpStatus.CREATED);
 
     }
 
+    @GetMapping("/get/info/{passengerId}")
+    ResponseEntity<PassengerResponse> getPassengerInfo(@PathVariable String passengerId) {
+        PassengerResponse response = busService.getPassengerInfo(passengerId);
+        return new ResponseEntity<PassengerResponse>(response, HttpStatus.CREATED);
 
+    }
 }

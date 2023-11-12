@@ -14,7 +14,4 @@ public interface BusOwnerRepositories extends JpaRepository<BusOwnerApp , String
 
     boolean existsByOwnerContactNumber(String ownerContactNumber);
 
-    Optional<BusOwnerApp> findByOwnerEmail(String ownerEmail);
-
-    Optional<BusOwnerApp> findByOwnerContactNumber(String ownerContactNumber);
 }

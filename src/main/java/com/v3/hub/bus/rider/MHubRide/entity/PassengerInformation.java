@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.Optional;
 
 @Data
 @AllArgsConstructor
@@ -28,4 +29,5 @@ public class PassengerInformation {
     @ManyToOne
     @JoinColumn(name = "bus_FK")
     private BusInformation busInformation;
+
 }
