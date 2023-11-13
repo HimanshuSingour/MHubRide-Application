@@ -2,6 +2,7 @@ package com.v3.hub.bus.rider.MHubRide.service;
 
 import com.v3.hub.bus.rider.MHubRide.dto.BusDto.BusRequest;
 import com.v3.hub.bus.rider.MHubRide.dto.BusDto.BusResponse;
+import com.v3.hub.bus.rider.MHubRide.dto.CancelResponse;
 import com.v3.hub.bus.rider.MHubRide.dto.ConductorDto.ConductorRequest;
 import com.v3.hub.bus.rider.MHubRide.dto.ConductorDto.ConductorResponse;
 import com.v3.hub.bus.rider.MHubRide.dto.DriverDto.DriverRequest;
@@ -17,6 +18,7 @@ import com.v3.hub.bus.rider.MHubRide.exceptions.BusServiceException;
 import com.v3.hub.bus.rider.MHubRide.payloads.PayLoadsConfig;
 import com.v3.hub.bus.rider.MHubRide.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -42,7 +44,6 @@ public class BusServiceImpl implements BusService {
     private DriverRepositories driverRepositories;
     @Autowired
     private BusOwnerRepositories busOwnerRepositories;
-
 
     @Override
     public OwnerResponse addOwner(OwnerRequest ownerRequest) {
@@ -251,6 +252,31 @@ public class BusServiceImpl implements BusService {
     }
 
     @Override
+    public PassengerResponse getPassengerInfoByTicketNumberAndSeatNumber(String ticketNumber, String seatNumber) {
+        return null;
+    }
+
+    @Override
+    public DriverResponse getDriverInfo(String licenseNumber, String driverRegistrationNumber) {
+        return null;
+    }
+
+    @Override
+    public ConductorResponse getConductorInfo(String licenseNumber, String conductorId) {
+        return null;
+    }
+
+    @Override
+    public PassengerResponse checkSeatDetails(String seatNumber) {
+        return null;
+    }
+
+    @Override
+    public BusResponse getBusInfo(String busInit, String busNumber) {
+        return null;
+    }
+
+    @Override
     public ConductorResponse addConductor(ConductorRequest conductorRequest) {
 
         if (conductorRequest.getConductorId() == null || conductorRequest.getDriverName() == null
@@ -309,6 +335,7 @@ public class BusServiceImpl implements BusService {
             Optional<PassengerInformation> Information = passengerRepositories.findById(passengerRequest.getPassengerId());
             if (Information.isEmpty()) {
 
+
                 passengerInformation = PassengerInformation.builder()
                         .passengerId(passengerRequest.getPassengerId())
                         .passengerName(passengerRequest.getPassengerName())
@@ -333,6 +360,11 @@ public class BusServiceImpl implements BusService {
                 .contactNumber(passengerInformation.getContactNumber())
                 .notes(PASSENGER_ADDED)
                 .build();
+    }
+
+    @Override
+    public CancelResponse cancelASeat(String ticketNumber, String seatNumber, String passengerId) {
+        return null;
     }
 
     @Override

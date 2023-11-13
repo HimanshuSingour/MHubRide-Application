@@ -12,7 +12,6 @@ import com.v3.hub.bus.rider.MHubRide.dto.OwnerDto.OwnerResponse;
 import com.v3.hub.bus.rider.MHubRide.dto.OwnerInforDto.OwnerInfoResponse;
 import com.v3.hub.bus.rider.MHubRide.dto.PassengerDto.PassengerRequest;
 import com.v3.hub.bus.rider.MHubRide.dto.PassengerDto.PassengerResponse;
-import com.v3.hub.bus.rider.MHubRide.entity.ConductorInformation;
 
 
 public interface BusService {
@@ -33,9 +32,11 @@ public interface BusService {
     BusResponse getBusInfo(String busInit, String busNumber);
 
 
-    // TODO: PERFORMED SOME USER INFO
+    // TODO: PERFORMED SOME USER TASK
     PassengerResponse bookASeat(PassengerRequest passengerRequest);
     CancelResponse cancelASeat(String ticketNumber , String seatNumber , String passengerId);
+
+
 
 
 
