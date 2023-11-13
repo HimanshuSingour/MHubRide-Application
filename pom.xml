@@ -62,17 +62,6 @@
     <build>
         <plugins>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.11.0</version>
-                <configuration>
-                    <verbose>true</verbose>
-                    <fork>true</fork>
-                    <executable>/Library/Java/JavaVirtualMachines/jdk-17.0.1.jdk/Contents/Home/bin/javac</executable>
-                    <!-- Adjust the path based on your JDK installation -->
-                </configuration>
-            </plugin>
 
             <plugin>
                 <groupId>org.springframework.boot</groupId>
