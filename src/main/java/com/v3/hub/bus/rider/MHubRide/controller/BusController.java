@@ -12,9 +12,12 @@ import com.v3.hub.bus.rider.MHubRide.dto.OwnerInforDto.OwnerInfoRequest;
 import com.v3.hub.bus.rider.MHubRide.dto.OwnerInforDto.OwnerInfoResponse;
 import com.v3.hub.bus.rider.MHubRide.dto.PassengerDto.PassengerRequest;
 import com.v3.hub.bus.rider.MHubRide.dto.PassengerDto.PassengerResponse;
+import com.v3.hub.bus.rider.MHubRide.dto.UserRegister.UserRegisterRequest;
+import com.v3.hub.bus.rider.MHubRide.dto.UserRegister.UserRegisterResponse;
 import com.v3.hub.bus.rider.MHubRide.entity.BusInformation;
 import com.v3.hub.bus.rider.MHubRide.entity.BusOwnerApp;
 import com.v3.hub.bus.rider.MHubRide.service.BusService;
+import com.v3.hub.bus.rider.MHubRide.service.SecurityService.UserInfoSecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +29,9 @@ public class BusController {
 
     @Autowired
     private BusService busService;
+
+    @Autowired
+    private UserInfoSecurityService userInfoSecurityService;
 
     @PostMapping("/add-owner")
     ResponseEntity<OwnerResponse> addOwner(@RequestBody OwnerRequest busInformation) {
@@ -73,6 +79,13 @@ public class BusController {
     ResponseEntity<PassengerResponse> getPassengerInfo(@PathVariable String passengerId) {
         PassengerResponse response = busService.getPassengerInfo(passengerId);
         return new ResponseEntity<PassengerResponse>(response, HttpStatus.CREATED);
+
+    }
+
+    @GetMapping("/register-user")
+    ResponseEntity<UserRegisterResponse> getPassengerInfo(@RequestBody UserRegisterRequest userRegisterRequest) {
+        UserRegisterResponse response = userInfoSecurityService.registerUser(userRegisterRequest);
+        return new ResponseEntity<UserRegisterResponse>(response, HttpStatus.CREATED);
 
     }
 }

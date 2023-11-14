@@ -37,15 +37,15 @@ public class BusInformation {
     @JsonIgnore
     private BusOwnerApp busOwnerApp;
 
-    @OneToOne(mappedBy = "busInformation" , cascade = CascadeType.ALL , fetch = FetchType.EAGER)
+    @OneToOne(mappedBy = "busInformation", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnore
     private ConductorInformation conductorInformation;
 
-    @OneToOne(mappedBy = "busInformation" , cascade = CascadeType.ALL , fetch = FetchType.EAGER)
+    @OneToOne(mappedBy = "busInformation", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnore
     private DriverInformation driverInformation;
 
-    @OneToMany(mappedBy = "busInformation" , cascade = CascadeType.ALL , fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "busInformation", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnore
     private List<PassengerInformation> passengerInformation;
 
