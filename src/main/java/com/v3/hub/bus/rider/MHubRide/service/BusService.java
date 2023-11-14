@@ -34,7 +34,7 @@ public interface BusService {
 
     // TODO: PERFORMED SOME USER TASK
     PassengerResponse bookASeat(PassengerRequest passengerRequest);
-    CancelResponse cancelASeat(String ticketNumber , String seatNumber , String passengerId);
+    CancelResponse cancelASeat(String ticketNumber , String seatNumbers , String passengerId);
 
 
 
