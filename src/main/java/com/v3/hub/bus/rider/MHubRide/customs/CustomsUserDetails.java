@@ -1,4 +1,4 @@
-package com.v3.hub.bus.rider.MHubRide.security;
+package com.v3.hub.bus.rider.MHubRide.customs;
 
 import com.v3.hub.bus.rider.MHubRide.entity.UserInformation;
 import org.springframework.beans.factory.annotation.Autowired;

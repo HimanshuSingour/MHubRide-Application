@@ -1,5 +1,6 @@
 package com.v3.hub.bus.rider.MHubRide.security;
 
+import com.v3.hub.bus.rider.MHubRide.customs.CustomsUserDetailsServices;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
