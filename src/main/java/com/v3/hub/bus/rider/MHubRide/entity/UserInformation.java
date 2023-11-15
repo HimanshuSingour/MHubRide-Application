@@ -1,6 +1,7 @@
 package com.v3.hub.bus.rider.MHubRide.entity;
 
 
+import com.v3.hub.bus.rider.MHubRide.validations.EmailValidationSuffixType;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,6 +25,8 @@ public class UserInformation {
     private int userId;
     private String userName;
     private String userPassword;
+
+    @EmailValidationSuffixType
     private String userEmail;
     private String userPhoneNumber;
     private String message;
